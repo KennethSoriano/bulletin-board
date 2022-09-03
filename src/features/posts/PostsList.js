@@ -1,11 +1,17 @@
-import { useSelector } from "react-redux";
-import { selectAllPosts } from "./postsSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { selectAllPosts, getPostsError, getPostsStatus, fetchPosts } from "./postsSlice";
+import { useEffect } from "react";
 import PostAuthor from "./PostAuthor";
 import TimeAgo from "./TimeAgo";
+import ReactionButtons from "./ReactionButtons";
 
 
 const PostsList = () => {
-    const posts = useSelector(selectAllPosts)
+    const dispatch = useDispatch
+
+    const posts = useSelector(selectAllPosts);
+    const postsStatus = useSelector(getPostsStatus);
+    const error = useSelector(getPostsError);
 
     const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
 
@@ -17,6 +23,7 @@ const PostsList = () => {
                 <PostAuthor userid={post.userId} />
                 <TimeAgo  timestamp={post.date}/>
             </p>
+            <ReactionButtons post={post} />
         </article>
     ))
 
